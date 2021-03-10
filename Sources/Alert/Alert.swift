@@ -17,8 +17,8 @@ open class Alert {
     public typealias Completion = () -> Void
     public typealias Handler = (UIAlertAction, Int) -> Void
 
-    private let alertController: UIAlertController
-    private var handler: Handler?
+    let alertController: UIAlertController
+    var handler: Handler?
     
     static public func actionSheet(_ config: AlertConfigurator) -> Alert {
         let controller = UIAlertController(title: config.title, message: config.message, preferredStyle: .actionSheet)
@@ -75,8 +75,10 @@ private extension AlertAction {
         switch self {
         case .cancel(let title):
             return UIAlertAction(title: title, style: .cancel, handler: { handler($0) })
+            
         case .default(let title):
             return UIAlertAction(title: title, style: .default, handler: { handler($0) })
+            
         case .destructive(let title):
             return UIAlertAction(title: title, style: .destructive, handler: { handler($0) })
         }
