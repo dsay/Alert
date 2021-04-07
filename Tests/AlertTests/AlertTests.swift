@@ -1,16 +1,17 @@
 import XCTest
 @testable import Alert
 
-struct Config: AlertConfigurator {
-    var title: String? = "Title"
-    var message: String? = "Message"
-    var tintColor: UIColor? = UIColor.red
+extension AlertConfigurator {
+    
+    static var config: AlertConfigurator {
+        AlertConfigurator(title: "Title", message: "Message", tintColor: .red)
+    }
 }
 
 final class AlertTests: XCTestCase {
     
     func testActionSheet() {
-        let config = Config()
+        let config: AlertConfigurator = .config
         let fd = Alert.actionSheet(config).action(.cancel("Cancel"))
         
         XCTAssertEqual(fd.alertController.title, config.title)
@@ -18,7 +19,7 @@ final class AlertTests: XCTestCase {
     }
     
     func testAlert() {
-        let config = Config()
+        let config: AlertConfigurator = .config
         let fd = Alert.alert(config).action(.cancel("Cancel"))
         
         XCTAssertEqual(fd.alertController.title, config.title)
@@ -26,8 +27,7 @@ final class AlertTests: XCTestCase {
     }
     
     func testActionCancel() {
-        let config = Config()
-        let fd = Alert.alert(config).action(.cancel("Cancel"))
+        let fd = Alert.alert(.config).action(.cancel("Cancel"))
         
         if let action = fd.alertController.actions.last {
             XCTAssertEqual(action.title, "Cancel")
@@ -38,8 +38,7 @@ final class AlertTests: XCTestCase {
     }
     
     func testActionDefault() {
-        let config = Config()
-        let fd = Alert.alert(config).action(.default("Default"))
+        let fd = Alert.alert(.config).action(.default("Default"))
         
         if let action = fd.alertController.actions.last {
             XCTAssertEqual(action.title, "Default")
@@ -50,8 +49,7 @@ final class AlertTests: XCTestCase {
     }
     
     func testActionDestructive() {
-        let config = Config()
-        let fd = Alert.alert(config).action(.destructive("Destructive"))
+        let fd = Alert.alert(.config).action(.destructive("Destructive"))
         
         if let action = fd.alertController.actions.last {
             XCTAssertEqual(action.title, "Destructive")
@@ -62,8 +60,7 @@ final class AlertTests: XCTestCase {
     }
 
     func testAction() {
-        let config = Config()
-        let fd = Alert.alert(config).actions(["Default"])
+        let fd = Alert.alert(.config).actions(["Default"])
         
         if let action = fd.alertController.actions.last {
             XCTAssertEqual(action.title, "Default")

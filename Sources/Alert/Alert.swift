@@ -1,12 +1,20 @@
 import UIKit
 
-public protocol AlertConfigurator {
-    var title: String? { get }
-    var message: String? { get }
-    var tintColor: UIColor? { get }
+public class AlertConfigurator {
+    
+    var title: String?
+    var message: String?
+    var tintColor: UIColor?
+    
+    public init(title: String? = nil, message: String? = nil, tintColor: UIColor? = nil) {
+        self.title = title
+        self.message = message
+        self.tintColor = tintColor
+    }
 }
 
 public enum AlertAction {
+    
     case cancel(String?)
     case destructive(String?)
     case `default`(String?)
