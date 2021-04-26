@@ -36,6 +36,7 @@ open class Alert {
     
     static public func alert(_ config: AlertConfigurator) -> Alert {
         let controller = UIAlertController(title: config.title, message: config.message, preferredStyle: .alert)
+        controller.view.tintColor = config.tintColor
        return Alert(alertController: controller)
     }
     
