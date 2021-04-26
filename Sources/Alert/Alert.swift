@@ -1,6 +1,6 @@
 import UIKit
 
-public class AlertConfigurator {
+open class AlertConfigurator {
     
     var title: String?
     var message: String?
