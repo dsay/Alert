@@ -1,25 +1,5 @@
 import UIKit
 
-open class AlertConfigurator {
-    
-    var title: String?
-    var message: String?
-    var tintColor: UIColor?
-    
-    public init(title: String? = nil, message: String? = nil, tintColor: UIColor? = nil) {
-        self.title = title
-        self.message = message
-        self.tintColor = tintColor
-    }
-}
-
-public enum AlertAction {
-    
-    case cancel(String?)
-    case destructive(String?)
-    case `default`(String?)
-}
-
 open class Alert {
 
     public typealias Completion = () -> Void
@@ -28,13 +8,13 @@ open class Alert {
     let alertController: UIAlertController
     var handler: Handler?
     
-    static public func actionSheet(_ config: AlertConfigurator) -> Alert {
+    static public func actionSheet(_ config: Configurator) -> Alert {
         let controller = UIAlertController(title: config.title, message: config.message, preferredStyle: .actionSheet)
         controller.view.tintColor = config.tintColor
        return Alert(alertController: controller)
     }
     
-    static public func alert(_ config: AlertConfigurator) -> Alert {
+    static public func alert(_ config: Configurator) -> Alert {
         let controller = UIAlertController(title: config.title, message: config.message, preferredStyle: .alert)
         controller.view.tintColor = config.tintColor
        return Alert(alertController: controller)
@@ -44,17 +24,17 @@ open class Alert {
         self.alertController = alertController
     }
     
-    public func actions(_ actions: [AlertAction]) -> Alert {
+    public func actions(_ actions: [Action]) -> Alert {
        _ = actions.compactMap { action($0) }
         return self
     }
     
     public func actions(_ actions: [String]) -> Alert {
-        _ = actions.compactMap { action(.default($0)) }
+        _ = actions.compactMap { action(DefaultAction($0)) }
         return self
     }
     
-    public func action(_ action: AlertAction, handler: Completion? = nil) -> Alert {
+    public func action(_ action: Action, handler: Completion? = nil) -> Alert {
         if let handler = handler {
             alertController.addAction(action.createAlertAction(handler: { _ in handler() }))
         } else {
@@ -78,18 +58,9 @@ open class Alert {
     }
 }
 
-private extension AlertAction {
+private extension Alert.Action {
 
     func createAlertAction(handler: @escaping (UIAlertAction) -> Void) -> UIAlertAction {
-        switch self {
-        case .cancel(let title):
-            return UIAlertAction(title: title, style: .cancel, handler: { handler($0) })
-            
-        case .default(let title):
-            return UIAlertAction(title: title, style: .default, handler: { handler($0) })
-            
-        case .destructive(let title):
-            return UIAlertAction(title: title, style: .destructive, handler: { handler($0) })
-        }
+        return UIAlertAction(title: self.title, style: self.style, handler: { handler($0) })
     }
 }
